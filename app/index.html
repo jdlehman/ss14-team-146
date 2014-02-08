@@ -1,24 +1,18 @@
 <!doctype html>
 <html>
   <head>
-    <script src="bower_components/angular/angular.min.js"></script>
-    <script src="javascripts/app.js"></script>
-    <script src="javascripts/controllers/staticCtrl.js"></script>
-    <script src="javascripts/directives/saIdea.js"></script>
   </head>
   <body ng-app="staticApp">
 
-    <div ng-controller="StaticCtrl" class="idea-list">
-      <input ng-model="item.title">
-      <button ng-click="addItem()">Add</button>
-      <span>Credits: {{ user.credits }}/ {{ items.length }}</span>
+    <div ng-view></div>
 
-      <div ng-repeat="item in items | orderBy:'totalCredits':true">
-        <sa-idea item="item" user-credits="user.credits"></sa-idea>
-      </div>
-
-    </div>
-
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/angular-route/angular-route.min.js"></script>
+    <script src="bower_components/firebase/firebase.js"></script>
+    <script src="bower_components/angularfire/angularfire.js"></script>
+    <script src="javascripts/app.js"></script>
+    <script src="javascripts/controllers/staticCtrl.js"></script>
+    <script src="javascripts/directives/saIdea.js"></script>
   </body>
 </html>
 

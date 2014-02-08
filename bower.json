@@ -18,6 +18,8 @@
   "dependencies": {
     "angular": "~1.2.12",
     "firebase": "~1.0.3",
-    "angularfire": "~0.6.0"
+    "angularfire": "~0.6.0",
+    "angular-route": "~1.2.12",
+    "groundwork": "~2.4.0"
   }
 }
