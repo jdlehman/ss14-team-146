@@ -1,34 +1,47 @@
-staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', function($scope, $firebase) {
+staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', '$cookies', function($scope, $firebase, $cookies) {
   var roomName = 'randomRoom';
   var url = 'https://fiddlesticks.firebaseio.com/brainstorms/' + roomName + '/';
   var ref = new Firebase(url);
   var db = $firebase(ref);
 
-  $scope.user = new User('123user');
-  $scope.item = new Item();
+  if($cookies.userId == undefined) {
+    $cookies.userId = 'user' + Math.floor((1 + Math.random()) * 0x10000)
+              .toString(16)
+              .substring(1)
+              .toUpperCase();
+    $scope.user = new User($cookies.userId);
+  }
+  else {
+    $scope.user = db.$child('users/' + $cookies.userId);
+    if($scope.user == undefined) {
+      $scope.user.userId = $cookies.userId;
+    }
+    else {
+      $scope.user = new User($cookies.userId);
+    }
+  }
 
   $scope.items = db.$child('items');
-  $scope.users = db.$child('users');
-
   $scope.items.$on('loaded', function(value) {
     $scope.user.credits = $scope.items.$getIndex().length;
     db.$child('items').$bind($scope, 'items');
   });
 
+  $scope.users = db.$child('users');
   $scope.users.$on('loaded', function(value) {
-    $scope.user.credits = $scope.user.credits || $scope.items.$getIndex().length;
     db.$child('users/' + $scope.user.userId).$bind($scope, 'user');
     db.$child('users').$bind($scope, 'users');
   });
 
   $scope.addItem = function() {
     $scope.user.credits++;
+    $scope.item = new Item($scope.item.title);
     $scope.items.$add($scope.item);
-    $scope.item = new Item();
+    $scope.item = '';
   };
 
-  function Item() {
-    this.title = '';
+  function Item(title) {
+    this.title = title;
     this.totalCredits = 0;
     this.votes = {};
     this.votes[$scope.user.userId] = 0;
@@ -36,5 +49,6 @@ staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', function($scope, 
 
   function User(userId) {
     this.userId = userId;
+    this.credits = 0;
   };
 }]);

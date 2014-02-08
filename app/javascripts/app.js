@@ -1,4 +1,4 @@
-var staticApp = angular.module('staticApp', ['ngRoute', 'firebase'])
+var staticApp = angular.module('staticApp', ['ngRoute', 'firebase', 'ngCookies'])
   .config(['$routeProvider', function($routeProvider) {
     $routeProvider
       .when('/', {
