@@ -1,17 +1,25 @@
 staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', function($scope, $firebase) {
-  var url = 'https://fiery-fire-7756.firebaseio.com/';
+  var roomName = 'randomRoom';
+  var url = 'https://fiddlesticks.firebaseio.com/brainstorms/' + roomName + '/';
   var ref = new Firebase(url);
   var db = $firebase(ref);
 
-  $scope.userId = '123paulo';
+  $scope.user = new User('123user');
+  $scope.item = new Item();
 
   $scope.items = db.$child('items');
+  $scope.users = db.$child('users');
+
   $scope.items.$on('loaded', function(value) {
     $scope.user.credits = $scope.items.$getIndex().length;
     db.$child('items').$bind($scope, 'items');
   });
-  $scope.item = new Item();
-  $scope.user = {};
+
+  $scope.users.$on('loaded', function(value) {
+    $scope.user.credits = $scope.user.credits || $scope.items.$getIndex().length;
+    db.$child('users/' + $scope.user.userId).$bind($scope, 'user');
+    db.$child('users').$bind($scope, 'users');
+  });
 
   $scope.addItem = function() {
     $scope.user.credits++;
@@ -22,7 +30,11 @@ staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', function($scope, 
   function Item() {
     this.title = '';
     this.totalCredits = 0;
-    this.votes = {}
-    this.votes[$scope.userId] = 0;
+    this.votes = {};
+    this.votes[$scope.user.userId] = 0;
   }
+
+  function User(userId) {
+    this.userId = userId;
+  };
 }]);
