@@ -1,0 +1,23 @@
+{
+  "name": "static_showdown",
+  "version": "0.0.0",
+  "authors": [
+    "jdlehman <jonathan.lehman91@gmail.com>"
+  ],
+  "description": "Brainstorm app",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.2.12",
+    "firebase": "~1.0.3",
+    "angularfire": "~0.6.0"
+  }
+}

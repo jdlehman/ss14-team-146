@@ -1,0 +1,8 @@
+{
+  "name": "my-project-name",
+  "version": "0.0.0",
+  "devDependencies": {
+    "gulp-util": "~2.2.14",
+    "gulp": "~3.5.2"
+  }
+}

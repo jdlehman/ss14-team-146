@@ -1,0 +1,5 @@
+*.sw*
+.DS_STORE
+bower_components
+app/bower_components
+node_modules
