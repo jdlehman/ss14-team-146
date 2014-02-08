@@ -18,6 +18,11 @@ staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', '$cookies', funct
 
   $scope.items = db.$child('items');
   $scope.items.$on('loaded', function(value) {
+    db.$child('items').$bind($scope, 'items');
+  });
+
+  $scope.users = db.$child('users');
+  $scope.users.$on('loaded', function(value) {
     // check if user defined in DB
     if(typeof $scope.user.credits == 'undefined') {
       $scope.user = new User($cookies.userId);
@@ -26,11 +31,6 @@ staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', '$cookies', funct
       $scope.user.userId = $cookies.userId;
     }
 
-    db.$child('items').$bind($scope, 'items');
-  });
-
-  $scope.users = db.$child('users');
-  $scope.users.$on('loaded', function(value) {
     db.$child('users/' + $scope.user.userId).$bind($scope, 'user');
     db.$child('users').$bind($scope, 'users');
   });
