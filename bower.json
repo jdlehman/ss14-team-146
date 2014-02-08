@@ -5,6 +5,7 @@
     "jdlehman <jonathan.lehman91@gmail.com>"
   ],
   "description": "Brainstorm app",
+  "directory": "app/bower_components",
   "license": "MIT",
   "private": true,
   "ignore": [
