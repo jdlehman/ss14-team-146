@@ -3,13 +3,22 @@ staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', function($scope, 
   var ref = new Firebase(url);
   var db = $firebase(ref);
 
+  $scope.user = new User('123nochael');
+  $scope.item = new Item();
+
   $scope.items = db.$child('items');
+  $scope.users = db.$child('users');
+
   $scope.items.$on('loaded', function(value) {
-    $scope.user.credits = $scope.items.$getIndex().length;
     db.$child('items').$bind($scope, 'items');
   });
-  $scope.item = new Item();
-  $scope.user = {};
+
+  $scope.users.$on('loaded', function(value) {
+    // get cookie and set here
+    $scope.users.$add($scope.user);
+    $scope.user.credits = $scope.user.credits || $scope.items.$getIndex().length;
+    db.$child('users').$bind($scope, 'users');
+  });
 
   $scope.addItem = function() {
     $scope.user.credits++;
@@ -19,7 +28,11 @@ staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', function($scope, 
 
   function Item() {
     this.title = '';
-    this.creditsFromUser = 0;
+    this.votes = { placeHolder: 0 };
     this.totalCredits = 0;
   }
+
+  function User(userId) {
+    this.userId = userId;
+  };
 }]);
