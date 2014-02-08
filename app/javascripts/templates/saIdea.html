@@ -1,7 +1,22 @@
-<div>
+<!--<div>
   <strong>{{ item.title }}</strong>
   {{ item.votes[scope.userId] }}
   <button ng-click="addCredit()">Add</button>
   <button ng-click="removeCredit()">Remove</button>
   Total: {{ item.totalCredits }}
-</div>
+</div> -->
+<li class="row padded box" style="background-color: #ccc">
+  <div class="two fourths">
+    <strong>{{ item.title }}</strong>
+  </div>
+
+  <div class="one fourth">
+    <button ng-click="addCredit()" class="icon-plus success"></button>
+     ({{ item.votes[scope.userId] }})
+    <button ng-click="removeCredit()" class="icon-minus error"></button>
+  </div>
+
+  <div class="one fourth">
+    {{ item.totalCredits }}
+  </div>
+</li>

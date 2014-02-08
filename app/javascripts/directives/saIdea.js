@@ -6,6 +6,7 @@ staticApp.directive('saIdea', [function() {
       user: '='
     },
     templateUrl: 'javascripts/templates/saIdea.html',
+    replace: true,
     link: function(scope, el, attr) {
       scope.addCredit = function() {
         if(scope.user.credits > 0) {
