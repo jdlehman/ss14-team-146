@@ -3,32 +3,24 @@ staticApp.directive('saIdea', [function() {
     restrict: 'E',
     scope: {
       item: '=',
-      userCredits: '=',
-      userId: '='
+      user: '='
     },
     templateUrl: 'javascripts/templates/saIdea.html',
     link: function(scope, el, attr) {
       scope.addCredit = function() {
-        if(scope.userCredits > 0) {
-          //scope.item.creditsFromUser++;
+        if(scope.user.credits > 0) {
           scope.item.totalCredits++;
-          scope.userCredits--;
-          if (scope.item.votes[scope.userId]==undefined) {
-            scope.item.votes[scope.userId] = 1;
-          } else {
-            scope.item.votes[scope.userId]++;
-          }
-
+          scope.user.credits--;
+            var curVal = scope.item.votes[scope.user.userId] || 0;
+            scope.item.votes[scope.user.userId] = curVal + 1;
         }
-
       };
 
       scope.removeCredit = function() {
-        if(scope.item.votes[scope.userId] > 0) {
-          //scope.item.creditsFromUser--;
+        if(scope.item.votes[scope.user.userId] > 0) {
           scope.item.totalCredits--;
-          scope.userCredits++;
-          scope.item.votes[scope.userId]--;
+          scope.user.credits++;
+          scope.item.votes[scope.user.userId]--;
         }
       }
     }

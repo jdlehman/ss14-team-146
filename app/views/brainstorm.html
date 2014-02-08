@@ -4,7 +4,7 @@
   <span>Credits: {{ user.credits }}/ {{ items.$getIndex().length }}</span>
 
   <div ng-repeat="item in items | orderBy:'totalCredits':true">
-    <sa-idea item="item" user-credits="user.credits" user-id="userId"></sa-idea>
+    <sa-idea item="item" user="user"></sa-idea>
   </div>
 
 </div>
