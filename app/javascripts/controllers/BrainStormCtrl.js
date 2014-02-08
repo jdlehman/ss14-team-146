@@ -4,6 +4,7 @@ staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', '$cookies', funct
   var ref = new Firebase(url);
   var db = $firebase(ref);
 
+  // check if userId is stored cookie
   if($cookies.userId == undefined) {
     $cookies.userId = 'user' + Math.floor((1 + Math.random()) * 0x10000)
               .toString(16)
@@ -13,17 +14,18 @@ staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', '$cookies', funct
   }
   else {
     $scope.user = db.$child('users/' + $cookies.userId);
-    if($scope.user == undefined) {
-      $scope.user.userId = $cookies.userId;
-    }
-    else {
-      $scope.user = new User($cookies.userId);
-    }
   }
 
   $scope.items = db.$child('items');
   $scope.items.$on('loaded', function(value) {
-    $scope.user.credits = $scope.items.$getIndex().length;
+    // check if user defined in DB
+    if(typeof $scope.user.credits == 'undefined') {
+      $scope.user = new User($cookies.userId);
+    }
+    else {
+      $scope.user.userId = $cookies.userId;
+    }
+
     db.$child('items').$bind($scope, 'items');
   });
 
