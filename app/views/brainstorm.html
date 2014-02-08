@@ -1,0 +1,10 @@
+<div ng-controller="StaticCtrl" class="idea-list">
+  <input ng-model="item.title">
+  <button ng-click="addItem()">Add</button>
+  <span>Credits: {{ user.credits }}/ {{ items.length }}</span>
+
+  <div ng-repeat="item in items | orderBy:'totalCredits':true">
+    <sa-idea item="item" user-credits="user.credits"></sa-idea>
+  </div>
+
+</div>
