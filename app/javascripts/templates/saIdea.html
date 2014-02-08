@@ -1,6 +1,6 @@
 <div>
   <strong>{{ item.title }}</strong>
-  {{ item.votes[scope.userId] }}
+  {{ item.votes[user.userId] }}
   <button ng-click="addCredit()">Add</button>
   <button ng-click="removeCredit()">Remove</button>
   Total: {{ item.totalCredits }}
