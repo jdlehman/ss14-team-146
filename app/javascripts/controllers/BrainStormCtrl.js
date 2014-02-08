@@ -1,7 +1,9 @@
 staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', function($scope, $firebase) {
-  var url = 'https://fiddlesticks.firebaseio.com/';
+  var url = 'https://fiery-fire-7756.firebaseio.com/';
   var ref = new Firebase(url);
   var db = $firebase(ref);
+
+  $scope.userId = '123paulo';
 
   $scope.items = db.$child('items');
   $scope.items.$on('loaded', function(value) {
@@ -19,7 +21,8 @@ staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', function($scope, 
 
   function Item() {
     this.title = '';
-    this.creditsFromUser = 0;
     this.totalCredits = 0;
+    this.votes = {}
+    this.votes[$scope.userId] = 0;
   }
 }]);
