@@ -1,12 +1,21 @@
 <div>
-  <button ng-click="editTime()" ng-disabled="timerRunning">Edit Time</button>
+  <button ng-click="editTime()" ng-disabled="timerRunning" class="one half">Edit Time</button>
   <form ng-submit="setTime()" ng-hide="formHidden" name="timeForm" novalidate>
-    <label>Days</label>
-    <input ng-model="time.days" type="number">
-    <label>Hours</label>
-    <input ng-model="time.hours" type="number">
-    <label>Minutes</label>
-    <input ng-model="time.minutes" type="number">
-    <button ng-disabled="timeForm.$invalid || timerRunning" type="submit">Change Time</button>
+    <div class="row">
+      <div class="one half">
+        <label for="hours">Hours</label>
+        <input ng-model="time.hours" type="number" name="hours">
+      </div>
+      <div class="one half">
+        <label for="minutes">Minutes</label>
+        <input ng-model="time.minutes" type="number" name="minutes">
+      </div>
+    </div>
+
+    <br>
+    <div class="row">
+      <button ng-disabled="timeForm.$invalid || timerRunning" type="submit" class="blue">Change Time</button>
+      <button ng-click="hideForm()" ng-disabled="timeForm.$invalid || timerRunning" type="button" class="error">Cancel</button>
+    </div>
   </form>
 </div>

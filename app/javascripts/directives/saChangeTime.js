@@ -17,8 +17,12 @@ staticApp.directive('saChangeTime', [function() {
       };
 
       scope.setTime = function() {
-        scope.formHidden = true;
+        scope.hideForm();
         scope.seconds = calculateSeconds();
+      };
+
+      scope.hideForm = function() {
+        scope.formHidden = true;
       };
 
       function separateSeconds() {
