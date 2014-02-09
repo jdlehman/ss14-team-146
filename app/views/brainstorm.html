@@ -1,7 +1,14 @@
+<div ng-controller="TimerCtrl">
+  <sa-timer></sa-timer>
+  <button ng-disabled="countDownRunning" ng-click="startTimer()">Start Timer</button>
+</div>
+
+
 <div ng-controller="BrainstormCtrl" class="idea-list two thirds padded">
   <div>
-    <textarea rows="5" cols="5" ng-model="item.title"></textarea>
-    <button ng-click="addItem()" class="one whole blue large">Add</button>
+{{timerRunning}}
+    <textarea ng-disabled="!timerRunning" rows="5" cols="5" ng-model="item.title"></textarea>
+    <button ng-disabled="!timerRunning" ng-click="addItem()" class="one whole blue large">Add</button>
   </div>
   <span>Credits: {{ user.credits }}/ {{ items.$getIndex().length }}</span>
 
@@ -9,7 +16,7 @@
   <br>
   <br>
   <div ng-repeat="item in items | orderBy:'totalCredits':true">
-    <sa-idea item="item" user="user"></sa-idea>
+    <sa-idea item="item" user="user" timer-running="timerRunning"></sa-idea>
   </div>
 </div>
 

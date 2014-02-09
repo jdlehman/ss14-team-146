@@ -6,6 +6,11 @@ staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', '$cookies', '$loc
   var ref = new Firebase(url);
   var db = $firebase(ref);
 
+  $scope.timerRunning = false;
+  $scope.$on('timerStateChange', function(event, val) {
+    $scope.timerRunning = val;
+  });
+
   // check if userId is stored cookie
   if($cookies.userId == undefined) {
     $cookies.userId = generateUserId();

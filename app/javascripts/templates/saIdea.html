@@ -2,12 +2,12 @@
   <p class="three fourths small-tablet">{{ item.title }}</p>
 
   <div class="one fourth small-tablet">
-    <button ng-click="addCredit()" class="turquoise round"><i class="icon-plus"></i></button>
+    <button ng-disabled="!timerRunning" ng-click="addCredit()" class="turquoise round"><i class="icon-plus"></i></button>
     <span>
       <big style="vertical-align: middle">{{ item.totalCredits }}</big>
       <small style="vertical-align: middle">({{ item.votes[user.userId] }})</small>
     </span>
     <span style="font-size: 1.3em"></span>
-    <button ng-click="removeCredit()" class="red round"><i class="icon-minus"></i></button>
+    <button ng-disabled="!timerRunning" ng-click="removeCredit()" class="red round"><i class="icon-minus"></i></button>
   </div>
 </div>

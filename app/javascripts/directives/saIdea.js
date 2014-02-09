@@ -3,7 +3,8 @@ staticApp.directive('saIdea', [function() {
     restrict: 'E',
     scope: {
       item: '=',
-      user: '='
+      user: '=',
+      timerRunning: '='
     },
     templateUrl: 'javascripts/templates/saIdea.html',
     replace: true,
