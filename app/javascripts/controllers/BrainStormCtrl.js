@@ -8,10 +8,7 @@ staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', '$cookies', '$loc
 
   // check if userId is stored cookie
   if($cookies.userId == undefined) {
-    $cookies.userId = 'user' + Math.floor((1 + Math.random()) * 0x10000)
-              .toString(16)
-              .substring(1)
-              .toUpperCase();
+    $cookies.userId = generateUserId();
     $scope.user = new User($cookies.userId);
   }
   else {
@@ -43,6 +40,13 @@ staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', '$cookies', '$loc
     $scope.items.$add($scope.item);
     $scope.item = '';
   };
+
+  function generateUserId() {
+    return 'user' + Math.floor((1 + Math.random()) * 0x10000)
+              .toString(16)
+              .substring(1)
+              .toUpperCase();
+  }
 
   function Item(title) {
     this.title = title;

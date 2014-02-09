@@ -15,8 +15,8 @@ staticApp.directive('saIdea', [function() {
         if(scope.user.credits > 0) {
           scope.item.totalCredits++;
           scope.user.credits--;
-            var curVal = scope.item.votes[scope.user.userId] || 0;
-            scope.item.votes[scope.user.userId] = curVal + 1;
+          var curVal = scope.item.votes[scope.user.userId] || 0;
+          scope.item.votes[scope.user.userId] = curVal + 1;
         }
       };
 

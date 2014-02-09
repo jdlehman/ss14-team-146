@@ -1,4 +1,5 @@
 staticApp.controller('MainCtrl', ['$scope', function($scope) {
+
   $scope.generateBrainstormLink = function() {
     return '#/brainstorm/' + $scope.random.toString();
   };
