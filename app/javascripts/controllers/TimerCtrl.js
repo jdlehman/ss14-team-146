@@ -9,9 +9,19 @@ staticApp.controller('TimerCtrl', ['$scope', '$rootScope', '$firebase', '$locati
   $scope.timer = db.$child('timer');
   $scope.timer.$on('loaded', function(value) {
     db.$child('timer').$bind($scope, 'timer');
+    if(typeof $scope.timer.timeLeft === 'undefined') {
+      //default to 10 minutes
+      console.log('here');
+      $scope.timer.timeLeft = 600;//seconds
+      $scope.timer.countDownRunning = false;
+    }
+    else {
+      //start timer if already running
+      if($scope.timer.countDownRunning) {
+        $scope.startTimer();
+      }
+    }
   });
-  $scope.timer.timeLeft = 600;//seconds
-  $scope.timer.countDownRunning = false;
 
   $scope.startTimer = function() {
     $scope.timer.countDownRunning = true;
