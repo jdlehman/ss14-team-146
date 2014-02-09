@@ -6,6 +6,11 @@ staticApp.controller('TimerCtrl', ['$scope', '$rootScope', '$firebase', '$locati
   var ref = new Firebase(url);
   var db = $firebase(ref);
 
+  $scope.loaded = false;
+  db.$on('loaded', function(value) {
+    $scope.loaded = true;
+  });
+
   $scope.timer = db.$child('timer');
   $scope.timer.$on('loaded', function(value) {
     db.$child('timer').$bind($scope, 'timer');

@@ -6,6 +6,11 @@ staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', '$cookies', '$loc
   var ref = new Firebase(url);
   var db = $firebase(ref);
 
+  $scope.loaded = false;
+  db.$on('loaded', function(value) {
+    $scope.loaded = true;
+  });
+
   $scope.timerRunning = false;
   $scope.$on('timerStateChange', function(event, val) {
     $scope.timerRunning = val;

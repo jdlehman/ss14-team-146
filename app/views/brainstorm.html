@@ -1,25 +1,36 @@
 <div ng-controller="TimerCtrl">
-  <sa-timer>
-    <sa-change-time seconds="timer.timeLeft" timer-running="timer.countDownRunning"></sa-change-time>
-  </sa-timer>
-  <button ng-disabled="timer.countDownRunning || timer.timeLeft == 0" ng-click="startTimer()">Start Timer</button>
+  <div ng-hide="!loaded">
+    <sa-timer>
+      <sa-change-time seconds="timer.timeLeft" timer-running="timer.countDownRunning"></sa-change-time>
+    </sa-timer>
+    <button ng-disabled="timer.countDownRunning || timer.timeLeft == 0" ng-click="startTimer()">Start Timer</button>
+  </div>
+  <div ng-hide="loaded">
+    <h2>Loading Timer...</h2>
+  </div>
 </div>
 
 
 <div ng-controller="BrainstormCtrl">
-  <div class="idea-list two thirds padded">
-    <div>
-      <textarea ng-disabled="!timerRunning" rows="5" cols="5" ng-model="item.title"></textarea>
-      <button ng-disabled="!timerRunning" ng-click="addItem()" class="one whole blue large">Add</button>
+  <div ng-hide="!loaded">
+    <div class="idea-list two thirds padded">
+      <div>
+        <textarea ng-disabled="!timerRunning" rows="5" cols="5" ng-model="item.title"></textarea>
+        <button ng-disabled="!timerRunning" ng-click="addItem()" class="one whole blue large">Add</button>
+      </div>
+      <br><br><br>
+      <div ng-repeat="item in items | orderBy:'totalCredits':true">
+        <sa-idea item="item" user="user" timer-running="timerRunning"></sa-idea>
+      </div>
     </div>
-    <br><br><br>
-    <div ng-repeat="item in items | orderBy:'totalCredits':true">
-      <sa-idea item="item" user="user" timer-running="timerRunning"></sa-idea>
+
+    <div class="one third">
+      <h2>{{ user.credits }}/ {{ items.$getIndex().length }}</h2>
     </div>
   </div>
 
-  <div class="one third">
-    <h2>{{ user.credits }}/ {{ items.$getIndex().length }}</h2>
+  <div ng-hide="loaded">
+    <h2>Loading Interface...</h2>
   </div>
 </div>
 
