@@ -1,10 +1,18 @@
-<div ng-controller="BrainstormCtrl" class="idea-list">
-  <input ng-model="item.title">
-  <button ng-click="addItem()">Add</button>
+<div ng-controller="BrainstormCtrl" class="idea-list two thirds padded">
+  <div>
+    <textarea rows="5" cols="5" ng-model="item.title"></textarea>
+    <button ng-click="addItem()" class="one whole blue large">Add</button>
+  </div>
   <span>Credits: {{ user.credits }}/ {{ items.$getIndex().length }}</span>
 
+  <br>
+  <br>
+  <br>
   <div ng-repeat="item in items | orderBy:'totalCredits':true">
     <sa-idea item="item" user="user"></sa-idea>
   </div>
+</div>
 
+<div class="one third">
+  <h2>X/Y</h2>
 </div>

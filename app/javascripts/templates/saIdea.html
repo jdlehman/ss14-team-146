@@ -1,7 +1,13 @@
-<div>
-  <strong>{{ item.title }}</strong>
-  {{ item.votes[user.userId] }}
-  <button ng-click="addCredit()">Add</button>
-  <button ng-click="removeCredit()">Remove</button>
-  Total: {{ item.totalCredits }}
+<div class="row box" style="valign: center;">
+  <p class="three fourths small-tablet">{{ item.title }}</p>
+
+  <div class="one fourth small-tablet">
+    <button ng-click="addCredit()" class="turquoise round"><i class="icon-plus"></i></button>
+    <span>
+      <big style="vertical-align: middle">{{ item.totalCredits }}</big>
+      <small style="vertical-align: middle">({{ item.votes[user.userId] }})</small>
+    </span>
+    <span style="font-size: 1.3em"></span>
+    <button ng-click="removeCredit()" class="red round"><i class="icon-minus"></i></button>
+  </div>
 </div>

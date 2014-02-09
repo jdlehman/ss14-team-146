@@ -1,10 +1,13 @@
 <!doctype html>
 <html>
   <head>
+    <!--[if gt IE 9]><!-->
+    <link type="text/css" rel="stylesheet" href="bower_components/groundwork/css/groundwork.css">
+    <!--<![endif]-->
   </head>
   <body ng-app="staticApp">
 
-    <div ng-view></div>
+    <div class="row" ng-view></div>
 
     <script src="bower_components/angular/angular.min.js"></script>
     <script src="bower_components/angular-route/angular-route.min.js"></script>
