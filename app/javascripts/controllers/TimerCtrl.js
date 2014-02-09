@@ -1,5 +1,15 @@
-staticApp.controller('TimerCtrl', ['$scope', '$rootScope', function($scope, $rootScope) {
-  $scope.timer = {};
+staticApp.controller('TimerCtrl', ['$scope', '$rootScope', '$firebase', '$location', function($scope, $rootScope, $firebase, $location) {
+  // use random end of URL as room name
+  var roomName = $location.path().match(/[^\/]+$/);
+
+  var url = 'https://fiddlesticks.firebaseio.com/brainstorms/' + roomName + '/';
+  var ref = new Firebase(url);
+  var db = $firebase(ref);
+
+  $scope.timer = db.$child('timer');
+  $scope.timer.$on('loaded', function(value) {
+    db.$child('timer').$bind($scope, 'timer');
+  });
   $scope.timer.timeLeft = 600;//seconds
   $scope.timer.countDownRunning = false;
 
