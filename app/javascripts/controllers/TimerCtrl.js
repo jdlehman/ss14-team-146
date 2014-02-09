@@ -16,7 +16,6 @@ staticApp.controller('TimerCtrl', ['$scope', '$rootScope', '$firebase', '$locati
     db.$child('timer').$bind($scope, 'timer');
     if(typeof $scope.timer.timeLeft === 'undefined') {
       //default to 10 minutes
-      console.log('here');
       $scope.timer.timeLeft = 600;//seconds
       $scope.timer.countDownRunning = false;
     }
