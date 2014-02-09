@@ -1,5 +1,7 @@
-staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', '$cookies', function($scope, $firebase, $cookies) {
-  var roomName = 'randomRoom';
+staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', '$cookies', '$location', function($scope, $firebase, $cookies, $location) {
+  // use random end of URL as room name
+  var roomName = $location.path().match(/[^\/]+$/);
+
   var url = 'https://fiddlesticks.firebaseio.com/brainstorms/' + roomName + '/';
   var ref = new Firebase(url);
   var db = $firebase(ref);
