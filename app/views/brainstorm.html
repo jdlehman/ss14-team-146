@@ -6,7 +6,6 @@
 
 <div ng-controller="BrainstormCtrl" class="idea-list two thirds padded">
   <div>
-{{timerRunning}}
     <textarea ng-disabled="!timerRunning" rows="5" cols="5" ng-model="item.title"></textarea>
     <button ng-disabled="!timerRunning" ng-click="addItem()" class="one whole blue large">Add</button>
   </div>
