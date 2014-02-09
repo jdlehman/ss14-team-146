@@ -4,9 +4,6 @@ var staticApp = angular.module('staticApp', ['ngRoute', 'firebase', 'ngCookies']
       .when('/', {
         templateUrl: 'views/main.html'
       })
-      .when('/login', {
-        templateUrl: 'views/login.html'
-      })
       .when('/brainstorm/:id', {
         templateUrl: 'views/brainstorm.html'
       })
