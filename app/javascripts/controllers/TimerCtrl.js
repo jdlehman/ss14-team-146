@@ -1,4 +1,4 @@
-staticApp.controller('TimerCtrl', ['$scope', '$rootScope', '$firebase', '$location', function($scope, $rootScope, $firebase, $location) {
+staticApp.controller('TimerCtrl', ['$scope', '$rootScope', '$firebase', '$location', '$timeout', function($scope, $rootScope, $firebase, $location, $timeout) {
   // use random end of URL as room name
   var roomName = $location.path().match(/[^\/]+$/);
 
@@ -20,9 +20,14 @@ staticApp.controller('TimerCtrl', ['$scope', '$rootScope', '$firebase', '$locati
       $scope.timer.countDownRunning = false;
     }
     else {
-      //start timer if already running
+      //start timer if not already running
       if($scope.timer.countDownRunning) {
-        $scope.startTimer();
+        var currentTime = $scope.timer.timeLeft;
+        $timeout(function() {
+          if(currentTime === $scope.timer.timeLeft) {
+            $scope.startTimer();
+          }
+        }, 2000);
       }
     }
   });
