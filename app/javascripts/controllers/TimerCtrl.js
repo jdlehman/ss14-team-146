@@ -1,19 +1,20 @@
 staticApp.controller('TimerCtrl', ['$scope', '$rootScope', function($scope, $rootScope) {
-  $scope.timeLeft = 60;//seconds
-  $scope.countDownRunning = false;
+  $scope.timer = {};
+  $scope.timer.timeLeft = 600;//seconds
+  $scope.timer.countDownRunning = false;
 
   $scope.startTimer = function() {
-    $scope.countDownRunning = true;
+    $scope.timer.countDownRunning = true;
     $rootScope.$broadcast('timerStateChange', true);
 
     var intervalId = setInterval(function(){
       $scope.$apply(function() {
-        if($scope.timeLeft > 0) {
-          $scope.timeLeft--;
+        if($scope.timer.timeLeft > 0) {
+          $scope.timer.timeLeft--;
         }
         else {
           clearInterval(intervalId);
-          $scope.countDownRunning = false;
+          $scope.timer.countDownRunning = false;
           $rootScope.$broadcast('timerStateChange', false);
         }
       });

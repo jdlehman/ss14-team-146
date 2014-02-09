@@ -1,0 +1,12 @@
+<div>
+  <button ng-click="editTime()" ng-disabled="timerRunning">Edit Time</button>
+  <form ng-submit="setTime()" ng-hide="formHidden" name="timeForm" novalidate>
+    <label>Days</label>
+    <input ng-model="time.days" type="number">
+    <label>Hours</label>
+    <input ng-model="time.hours" type="number">
+    <label>Minutes</label>
+    <input ng-model="time.minutes" type="number">
+    <button ng-disabled="timeForm.$invalid || timerRunning" type="submit">Change Time</button>
+  </form>
+</div>

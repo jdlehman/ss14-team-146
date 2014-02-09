@@ -1,6 +1,8 @@
 <div ng-controller="TimerCtrl">
-  <sa-timer></sa-timer>
-  <button ng-disabled="countDownRunning || timeLeft == 0" ng-click="startTimer()">Start Timer</button>
+  <sa-timer>
+    <sa-change-time seconds="timer.timeLeft" timer-running="timer.countDownRunning"></sa-change-time>
+  </sa-timer>
+  <button ng-disabled="timer.countDownRunning || timer.timeLeft == 0" ng-click="startTimer()">Start Timer</button>
 </div>
 
 
