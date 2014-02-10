@@ -10,13 +10,12 @@ staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', '$cookies', '$loc
   db.$on('loaded', function(value) {
     $scope.loaded = true;
 
-    // check if timerRunnin is running/already set
+    // check if countDownRunning is running/already set
     // if not, set to false
     $scope.timer = db.$child('timer');
     $scope.timer.$on('loaded', function(value) {
-      $scope.timerRunning = $scope.timer.countDownRunning;
-      if(typeof $scope.timerRunning === 'undefined') {
-        $scope.timerRunning = false;
+      if(typeof $scope.timer.countDownRunning === 'undefined') {
+        $scope.timer.countDownRunning = false;
       }
     });
   });
@@ -24,7 +23,9 @@ staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', '$cookies', '$loc
 
 
   $scope.$on('timerStateChange', function(event, val) {
-    $scope.timerRunning = val;
+    console.log(val);
+    $scope.timer.countDownRunning = val;
+    console.log($scope.timer.countDownRunning);
   });
 
   // check if userId is stored cookie
