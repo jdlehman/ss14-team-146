@@ -9,9 +9,20 @@ staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', '$cookies', '$loc
   $scope.loaded = false;
   db.$on('loaded', function(value) {
     $scope.loaded = true;
+
+    // check if timerRunnin is running/already set
+    // if not, set to false
+    $scope.timer = db.$child('timer');
+    $scope.timer.$on('loaded', function(value) {
+      $scope.timerRunning = $scope.timer.countDownRunning;
+      if(typeof $scope.timerRunning === 'undefined') {
+        $scope.timerRunning = false;
+      }
+    });
   });
 
-  $scope.timerRunning = false;
+
+
   $scope.$on('timerStateChange', function(event, val) {
     $scope.timerRunning = val;
   });
