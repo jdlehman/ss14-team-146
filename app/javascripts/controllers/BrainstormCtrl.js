@@ -20,22 +20,9 @@ staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', '$cookies', '$loc
     });
   });
 
-
-
   $scope.$on('timerStateChange', function(event, val) {
-    console.log(val);
     $scope.timer.countDownRunning = val;
-    console.log($scope.timer.countDownRunning);
   });
-
-  // check if userId is stored cookie
-  if($cookies.userId == undefined) {
-    $cookies.userId = generateUserId();
-    $scope.user = new User($cookies.userId);
-  }
-  else {
-    $scope.user = db.$child('users/' + $cookies.userId);
-  }
 
   $scope.items = db.$child('items');
   $scope.items.$on('loaded', function(value) {
@@ -44,6 +31,15 @@ staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', '$cookies', '$loc
 
   $scope.users = db.$child('users');
   $scope.users.$on('loaded', function(value) {
+    // check if userId is stored cookie
+    if($cookies.userId == undefined) {
+      $cookies.userId = generateUserId();
+      $scope.user = new User($cookies.userId);
+    }
+    else {
+      $scope.user = db.$child('users/' + $cookies.userId);
+    }
+
     // check if user defined in DB
     if(typeof $scope.user.credits == 'undefined') {
       $scope.user = new User($cookies.userId);
