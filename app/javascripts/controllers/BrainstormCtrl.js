@@ -42,17 +42,21 @@ staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', '$cookies', '$loc
     else {
       $scope.user = db.$child('users/' + $cookies.userId);
     }
-
-    // check if user defined in DB
-    if(typeof $scope.user.credits === 'undefined') {
-      $scope.user = new User($cookies.userId);
-    }
-    else {
-      $scope.user.userId = $cookies.userId;
-    }
-
-    db.$child('users/' + $scope.user.userId).$bind($scope, 'user');
+    // 3 way binding to uesrs
     db.$child('users').$bind($scope, 'users');
+
+    // load current user
+    try {
+      $scope.user.$on('loaded', function(value) {
+      });
+    }
+    catch(ex) {
+    }
+    finally {
+      // hits this if user is in DB or was newly created (error thrown if user does not have $on method)
+      // 3 way binding to current user
+      db.$child('users/' + $scope.user.userId).$bind($scope, 'user');
+    }
   });
 
   // add brainstorm item
