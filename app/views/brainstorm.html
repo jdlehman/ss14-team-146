@@ -3,7 +3,7 @@
     <div class="idea-list two thirds padded">
       <div>
         <textarea ng-disabled="!timer.countDownRunning" rows="5" cols="5" ng-model="item.title"></textarea>
-        <button ng-disabled="!timer.countDownRunning" ng-click="addItem()" class="one whole blue large">Add</button>
+        <button ng-disabled="!timer.countDownRunning || item.title === undefined || item.title === ''" ng-click="addItem()" class="one whole blue large">Add</button>
       </div>
       <br><br><br>
       <div ng-repeat="item in items | orderBy:'totalCredits':true">
