@@ -4,18 +4,18 @@
     <div class="row">
       <div class="one half">
         <label for="hours">Hours</label>
-        <input ng-model="time.hours" type="number" name="hours">
+        <input ng-model="timeForm.hours" ng-pattern="/\d+/" type="number" name="hours" required>
       </div>
       <div class="one half">
         <label for="minutes">Minutes</label>
-        <input ng-model="time.minutes" type="number" name="minutes">
+        <input ng-model="timeForm.minutes" ng-pattern="/\d+/" type="number" name="minutes" required>
       </div>
     </div>
 
     <br>
     <div class="row">
       <button ng-disabled="timeForm.$invalid || timerRunning" type="submit" class="blue">Change Time</button>
-      <button ng-click="hideForm()" ng-disabled="timeForm.$invalid || timerRunning" type="button" class="error">Cancel</button>
+      <button ng-click="hideForm()" ng-disabled="timerRunning" type="button" class="error">Cancel</button>
     </div>
   </form>
 </div>

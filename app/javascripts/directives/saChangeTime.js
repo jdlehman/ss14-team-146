@@ -8,11 +8,10 @@ staticApp.directive('saChangeTime', [function() {
     replace: true,
     templateUrl: 'javascripts/templates/saChangeTime.html',
     link: function(scope, el, attr) {
-      scope.time = {};
       scope.formHidden = true;
-      separateSeconds();
 
       scope.editTime = function() {
+        separateSeconds();
         scope.formHidden = false;
       };
 
@@ -27,14 +26,14 @@ staticApp.directive('saChangeTime', [function() {
 
       function separateSeconds() {
         var timeRemaining = scope.seconds;
-        scope.time.hours = Math.floor(timeRemaining / (60 * 60));
-        timeRemaining -= scope.time.hours * 60 * 60;
-        scope.time.minutes = Math.floor(timeRemaining / 60);
+        scope.timeForm.hours = Math.floor(timeRemaining / (60 * 60));
+        timeRemaining -= scope.timeForm.hours * 60 * 60;
+        scope.timeForm.minutes = Math.floor(timeRemaining / 60);
       }
 
       function calculateSeconds() {
-        return scope.time.minutes * 60 +
-               scope.time.hours * 60 * 60;
+        return scope.timeForm.minutes * 60 +
+               scope.timeForm.hours * 60 * 60;
       }
 
     }
