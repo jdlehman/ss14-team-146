@@ -1,4 +1,4 @@
-staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', '$cookies', '$location', function($scope, $firebase, $cookies, $location) {
+staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', '$cookieStore', '$location', function($scope, $firebase, $cookieStore, $location) {
   // use random end of URL as room name
   var roomName = $location.path().match(/[^\/]+$/);
 
@@ -35,12 +35,12 @@ staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', '$cookies', '$loc
   $scope.users = db.$child('users');
   $scope.users.$on('loaded', function(value) {
     // check if userId is stored cookie
-    if(typeof $cookies.userId === 'undefined') {
-      $cookies.userId = generateUserId();
-      $scope.user = new User($cookies.userId);
+    if(typeof $cookieStore.get(roomName) === 'undefined') {
+      $cookieStore.put(roomName, generateUserId());
+      $scope.user = new User($cookieStore.get(roomName));
     }
     else {
-      $scope.user = db.$child('users/' + $cookies.userId);
+      $scope.user = db.$child('users/' + $cookieStore.get(roomName));
     }
     // 3 way binding to uesrs
     db.$child('users').$bind($scope, 'users');
@@ -55,7 +55,7 @@ staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', '$cookies', '$loc
     finally {
       // hits this if user is in DB or was newly created (error thrown if user does not have $on method)
       // 3 way binding to current user
-      db.$child('users/' + $scope.user.userId).$bind($scope, 'user');
+      db.$child('users/' + $cookieStore.get(roomName)).$bind($scope, 'user');
     }
   });
 
