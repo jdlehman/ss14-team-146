@@ -6,6 +6,7 @@ staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', '$cookies', '$loc
   var ref = new Firebase(url);
   var db = $firebase(ref);
 
+  // check if firebase has connected
   $scope.loaded = false;
   db.$on('loaded', function(value) {
     $scope.loaded = true;
@@ -24,15 +25,17 @@ staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', '$cookies', '$loc
     $scope.timer.countDownRunning = val;
   });
 
+  // load and bind items from firebase
   $scope.items = db.$child('items');
   $scope.items.$on('loaded', function(value) {
     db.$child('items').$bind($scope, 'items');
   });
 
+  // load and bind users and user from firebase
   $scope.users = db.$child('users');
   $scope.users.$on('loaded', function(value) {
     // check if userId is stored cookie
-    if($cookies.userId == undefined) {
+    if(typeof $cookies.userId === 'undefined') {
       $cookies.userId = generateUserId();
       $scope.user = new User($cookies.userId);
     }
@@ -41,7 +44,7 @@ staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', '$cookies', '$loc
     }
 
     // check if user defined in DB
-    if(typeof $scope.user.credits == 'undefined') {
+    if(typeof $scope.user.credits === 'undefined') {
       $scope.user = new User($cookies.userId);
     }
     else {
@@ -52,6 +55,7 @@ staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', '$cookies', '$loc
     db.$child('users').$bind($scope, 'users');
   });
 
+  // add brainstorm item
   $scope.addItem = function() {
     $scope.user.credits++;
     $scope.item = new Item($scope.item.title);
@@ -60,10 +64,7 @@ staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', '$cookies', '$loc
   };
 
   function generateUserId() {
-    return 'user' + Math.floor((1 + Math.random()) * 0x10000)
-              .toString(16)
-              .substring(1)
-              .toUpperCase();
+    return 'user' + Math.random().toString(36).substring(2);
   }
 
   function Item(title) {
