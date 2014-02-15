@@ -1,67 +1,52 @@
-staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', '$cookieStore', '$location', function($scope, $firebase, $cookieStore, $location) {
+staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', '$cookieStore', '$location', 'firebaseService', function($scope, $firebase, $cookieStore, $location, firebaseService) {
   // use random end of URL as room name
   var roomName = $location.path().match(/[^\/]+$/);
-
-  var url = 'https://fiddlesticks.firebaseio.com/brainstorms/' + roomName + '/';
-  var ref = new Firebase(url);
-  var db = $firebase(ref);
-
-  // check if firebase has connected
+  var db = firebaseService.init(roomName);
   $scope.loaded = false;
-  db.$on('loaded', function(value) {
-    $scope.loaded = true;
 
-    // check if countDownRunning is running/already set
-    // if not, set to false
-    $scope.timer = db.$child('timer');
-    $scope.timer.$on('loaded', function(value) {
-      if(typeof $scope.timer.countDownRunning === 'undefined') {
-        $scope.timer.countDownRunning = false;
-      }
-    });
+  // load timer from firebase
+  firebaseService.load(db, 'timer').then(function(value) {
+    $scope.loaded = true;
+    $scope.timer = value;
+    if(typeof $scope.timer.countDownRunning === 'undefined') {
+      $scope.timer.countDownRunning = false;
+    }
+  });
+
+  // load items from firebase
+  firebaseService.load(db, 'items').then(function(value) {
+    // 3 way binding
+    $scope.items = value;
+    //TODO: fix this hack
+    // once you set value to something, you can no longer use it to bind
+    firebaseService.load(db, 'items').then(function(value) { value.$bind($scope, 'items'); });
+  });
+
+  // load users from firebase
+  firebaseService.load(db, 'users').then(function(value) {
+    // 3 way binding
+    $scope.users = value.$bind($scope, 'users');
+    // check if userId is stored cookie
+    if(typeof $cookieStore.get(roomName) === 'undefined') {
+      // set cookie
+      $cookieStore.put(roomName, generateUserId());
+      // add user to users
+      $scope.user = new User($cookieStore.get(roomName));
+      $scope.users[$cookieStore.get(roomName)] = $scope.user;
+    }
+    return firebaseService.load(db, 'users/' + $cookieStore.get(roomName));
+  }).then(function(value) {
+    $scope.user = value.$bind($scope, 'user');
   });
 
   $scope.$on('timerStateChange', function(event, val) {
     $scope.timer.countDownRunning = val;
   });
 
-  // load and bind items from firebase
-  $scope.items = db.$child('items');
-  $scope.items.$on('loaded', function(value) {
-    db.$child('items').$bind($scope, 'items');
-  });
-
-  // load and bind users and user from firebase
-  $scope.users = db.$child('users');
-  $scope.users.$on('loaded', function(value) {
-    // check if userId is stored cookie
-    if(typeof $cookieStore.get(roomName) === 'undefined') {
-      $cookieStore.put(roomName, generateUserId());
-      $scope.user = new User($cookieStore.get(roomName));
-    }
-    else {
-      $scope.user = db.$child('users/' + $cookieStore.get(roomName));
-    }
-    // 3 way binding to uesrs
-    db.$child('users').$bind($scope, 'users');
-
-    // load current user
-    try {
-      $scope.user.$on('loaded', function(value) {
-      });
-    }
-    catch(ex) {
-    }
-    finally {
-      // hits this if user is in DB or was newly created (error thrown if user does not have $on method)
-      // 3 way binding to current user
-      db.$child('users/' + $cookieStore.get(roomName)).$bind($scope, 'user');
-    }
-  });
-
   // add brainstorm item
   $scope.addItem = function() {
     $scope.user.credits++;
+    $scope.user.totalCredits++;
     $scope.item = new Item($scope.item.title);
     $scope.items.$add($scope.item);
     $scope.item = '';
@@ -81,5 +66,6 @@ staticApp.controller('BrainstormCtrl', ['$scope', '$firebase', '$cookieStore', '
   function User(userId) {
     this.userId = userId;
     this.credits = 0;
+    this.totalCredits = 0;
   };
 }]);
