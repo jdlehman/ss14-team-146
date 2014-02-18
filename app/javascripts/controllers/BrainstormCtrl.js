@@ -1,51 +1,19 @@
-staticApp.controller('BrainstormCtrl', ['$scope', '$cookieStore', '$location', 'firebaseService', function($scope, $cookieStore, $location, firebaseService) {
+staticApp.controller('BrainstormCtrl', ['$scope', '$cookieStore', '$location', 'firebaseService', '$q', function($scope, $cookieStore, $location, firebaseService, $q) {
   // use random end of URL as room name
   var roomName = $location.path().match(/[^\/]+$/);
   var db = firebaseService.init(roomName);
   $scope.loaded = false;
 
-  // load timer from firebase
-  firebaseService.load(db, 'timer').then(function(value) {
-    $scope.timer = value;
-    if($scope.timer === null) {
-      $scope.timer = {};
-    }
-  });
-
-  // load items from firebase
-  firebaseService.load(db, 'items').then(function(value) {
-    $scope.items = value;
-    if($scope.items === null) {
-      $scope.items = {};
-    }
-    // 3 way binding
-    db.$child('items').$bind($scope, 'items');
-  });
-
-  var userName;
-  // load users from firebase
-  firebaseService.load(db, 'users').then(function(value) {
-    $scope.users = value;
-    if($scope.users === null) {
-      $scope.users = {};
-    }
-
-    userName = $cookieStore.get(roomName);
-    // check if userId is stored cookie
-    if(typeof userName === 'undefined') {
-      // set cookie
-      $cookieStore.put(roomName, generateUserId());
-      userName = $cookieStore.get(roomName);
-
-      // add user to users
-      $scope.user = new User(userName);
-      $scope.users[userName] = $scope.user;
-    }
-    else {
-      $scope.user = $scope.users[userName];
-    }
-    // 3 way binding
-    db.$child('users').$bind($scope, 'users');
+  // load data from firebase
+  $q.all([
+    firebaseService.load(db, 'timer'),
+    firebaseService.load(db, 'items'),
+    firebaseService.load(db, 'users')
+  ])
+  .then(function(vals) {
+    setUpTimer(vals[0]);
+    setUpItems(vals[1]);
+    setUpUsers(vals[2]);
     $scope.loaded = true;
   });
 
@@ -78,4 +46,36 @@ staticApp.controller('BrainstormCtrl', ['$scope', '$cookieStore', '$location', '
     this.credits = 0;
     this.totalCredits = 0;
   };
+
+  function setUpTimer(value) {
+    $scope.timer = value || {};
+  }
+
+  function setUpItems(value) {
+    $scope.items = value || {};
+    // 3 way binding
+    db.$child('items').$bind($scope, 'items');
+  }
+
+  function setUpUsers(value) {
+    $scope.users = value || {};
+
+    var userName = $cookieStore.get(roomName);
+    // check if userId is stored cookie
+    if(typeof userName === 'undefined') {
+      // set cookie
+      $cookieStore.put(roomName, generateUserId());
+      userName = $cookieStore.get(roomName);
+
+      // add user to users
+      $scope.user = new User(userName);
+      $scope.users[userName] = $scope.user;
+    }
+    else {
+      $scope.user = $scope.users[userName];
+    }
+    // 3 way binding
+    db.$child('users').$bind($scope, 'users');
+  }
+
 }]);
