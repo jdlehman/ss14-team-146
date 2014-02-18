@@ -1,23 +1,18 @@
-staticApp.controller('TimerCtrl', ['$scope', '$rootScope', '$firebase', '$location', '$timeout', function($scope, $rootScope, $firebase, $location, $timeout) {
+staticApp.controller('TimerCtrl', ['$scope', '$rootScope', 'firebaseService', '$location', '$timeout', function($scope, $rootScope, firebaseService, $location, $timeout) {
   // use random end of URL as room name
   var roomName = $location.path().match(/[^\/]+$/);
-
-  var url = 'https://fiddlesticks.firebaseio.com/brainstorms/' + roomName + '/';
-  var ref = new Firebase(url);
-  var db = $firebase(ref);
-
+  var db = firebaseService.init(roomName);
   $scope.loaded = false;
-  db.$on('loaded', function(value) {
-    $scope.loaded = true;
-  });
 
-  $scope.timer = db.$child('timer');
-  $scope.timer.$on('loaded', function(value) {
-    db.$child('timer').$bind($scope, 'timer');
-    if(typeof $scope.timer.timeLeft === 'undefined') {
+  firebaseService.load(db, 'timer').then(function(value) {
+
+    $scope.timer = value;
+    if($scope.timer === null) {
       //default to 10 minutes
-      $scope.timer.timeLeft = 600;//seconds
-      $scope.timer.countDownRunning = false;
+      $scope.timer = {
+        timeLeft: 600, //seconds
+        countDownRunning: false
+      };
     }
     else {
       //start timer if not already running
@@ -30,6 +25,9 @@ staticApp.controller('TimerCtrl', ['$scope', '$rootScope', '$firebase', '$locati
         }, 2000);
       }
     }
+    // 3 way binding
+    db.$child('timer').$bind($scope, 'timer');
+    $scope.loaded = true;
   });
 
   $scope.startTimer = function() {
