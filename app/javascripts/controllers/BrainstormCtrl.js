@@ -3,19 +3,32 @@ staticApp.controller('BrainstormCtrl', ['$scope', '$cookieStore', '$location', '
   var roomName = $location.path().match(/[^\/]+$/);
   var db = firebaseService.init(roomName);
   $scope.loaded = false;
+  $scope.timer = {};
+  $scope.items = {};
+  $scope.users = {};
+  $scope.user = {};
 
-  // load data from firebase
   $q.all([
-    firebaseService.load(db, 'timer'),
-    firebaseService.load(db, 'items'),
-    firebaseService.load(db, 'users')
-  ])
-  .then(function(vals) {
-    setUpTimer(vals[0]);
-    setUpItems(vals[1]);
-    setUpUsers(vals[2]);
-    $scope.loaded = true;
-  });
+    db.$child('timer').$bind($scope, 'timer'),
+    db.$child('items').$bind($scope, 'items'),
+    db.$child('users').$bind($scope, 'users'),
+  ]).then(function(vals) {
+      var userName = $cookieStore.get(roomName);
+      // check if userId is stored cookie
+      if(typeof userName === 'undefined') {
+        // set cookie
+        $cookieStore.put(roomName, generateUserId());
+        userName = $cookieStore.get(roomName);
+
+        // add user to users
+        $scope.user = new User(userName);
+        $scope.users[userName] = $scope.user;
+      }
+      else {
+        $scope.user = $scope.users[userName];
+      }
+      $scope.loaded = true;
+    });
 
   $scope.$on('timerStateChange', function(event, val) {
     $scope.timer.countDownRunning = val;
@@ -46,36 +59,5 @@ staticApp.controller('BrainstormCtrl', ['$scope', '$cookieStore', '$location', '
     this.credits = 0;
     this.totalCredits = 0;
   };
-
-  function setUpTimer(value) {
-    $scope.timer = value || {};
-  }
-
-  function setUpItems(value) {
-    $scope.items = value || {};
-    // 3 way binding
-    db.$child('items').$bind($scope, 'items');
-  }
-
-  function setUpUsers(value) {
-    $scope.users = value || {};
-
-    var userName = $cookieStore.get(roomName);
-    // check if userId is stored cookie
-    if(typeof userName === 'undefined') {
-      // set cookie
-      $cookieStore.put(roomName, generateUserId());
-      userName = $cookieStore.get(roomName);
-
-      // add user to users
-      $scope.user = new User(userName);
-      $scope.users[userName] = $scope.user;
-    }
-    else {
-      $scope.user = $scope.users[userName];
-    }
-    // 3 way binding
-    db.$child('users').$bind($scope, 'users');
-  }
 
 }]);
