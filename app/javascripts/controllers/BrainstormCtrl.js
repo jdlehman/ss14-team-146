@@ -1,6 +1,6 @@
-staticApp.controller('BrainstormCtrl', ['$scope', '$cookieStore', '$location', 'firebaseService', '$q', function($scope, $cookieStore, $location, firebaseService, $q) {
+staticApp.controller('BrainstormCtrl', ['$scope', '$cookieStore', '$routeParams', 'firebaseService', '$q', function($scope, $cookieStore, $routeParams, firebaseService, $q) {
   // use random end of URL as room name
-  var roomName = $location.path().match(/[^\/]+$/);
+  var roomName = $routeParams.id;
   var db = firebaseService.init(roomName);
   $scope.loaded = false;
   $scope.timer = {};
